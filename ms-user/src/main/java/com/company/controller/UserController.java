@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
-@RequestMapping("/v1/users")
+@RequestMapping("v1/users")
 @RequiredArgsConstructor
 public class UserController {
 

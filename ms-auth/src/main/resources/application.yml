@@ -1,1 +1,21 @@
-spring.application.name=ms-auth
+spring:
+  application:
+   name: auth-service
+  data:
+  cache:
+    redis:
+      port: 6379
+    type: redis
+
+
+application:
+  jwt:
+    secret-key-str: sdnkasjdnasdknsadnsakdnsakdnsakdndasdasdadasdasdassdsad
+    access-expiration-ms: 300000
+    refresh-expiration-ms: 1800000
+
+server:
+  servlet:
+    context-path: /api
+  port: 8082
+

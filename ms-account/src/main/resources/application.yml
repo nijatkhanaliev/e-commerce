@@ -1,6 +1,7 @@
 spring:
   application:
-    name: user-service
+   name: account-service
+
   datasource:
     username: postgres
     password: admin
@@ -20,11 +21,8 @@ spring:
     properties:
       hibernate:
         format_sql: false
-#  liquibase:
-#    enabled: true
-#    change-log: classpath:/db/changelog/changelog-master.yml
 
 server:
-  port: 8083
+  port: 8084
   servlet:
     context-path: /api/

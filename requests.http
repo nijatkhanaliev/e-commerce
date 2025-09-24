@@ -17,8 +17,18 @@ POST http://localhost:8082/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "email": "nica@example.com",
+  "email": "nicat@example.com",
   "password": "Nicat2004."
+}
+
+###
+# refresh token
+POST http://localhost:8082/api/v1/auth/refresh
+Content-Type: application/json
+
+{
+"userEmail": "nicat@example.com",
+"refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuaWNhdEBleGFtcGxlLmNvbSIsImlhdCI6MTc1ODcxMzIyMSwiZXhwIjoxNzU4NzE1MDIxfQ.4eLlEfLf_2QbRjxvyq4n1m25ZLCRfZFqJOaFZsr04h8"
 }
 
 ###

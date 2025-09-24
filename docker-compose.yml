@@ -1,0 +1,29 @@
+services:
+  redis_eCommerce:
+    container_name: redis_eCommerce
+    image: redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  user_db:
+    container_name: user_db
+    image: postgres:17.4
+    environment:
+      POSTGRES_DB: userdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5434:5432"
+    volumes:
+      - data:/var/lib/postgresql/data
+
+#  rabbitmq:
+#    container_name: rabbitmq_eCommerce
+#    image: rabbitmq:3-management
+#    ports:
+#      - "5672:5672"
+#      - "15672:15672"
+
+volumes:
+  data:

@@ -16,14 +16,54 @@ services:
     ports:
       - "5434:5432"
     volumes:
-      - data:/var/lib/postgresql/data
+      - user_data:/var/lib/postgresql/data
 
-#  rabbitmq:
-#    container_name: rabbitmq_eCommerce
-#    image: rabbitmq:3-management
-#    ports:
-#      - "5672:5672"
-#      - "15672:15672"
+  account_db:
+    container_name: account_db
+    image: postgres:17.4
+    environment:
+      POSTGRES_DB: accountdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5435:5432"
+    volumes:
+      - account_data:/var/lib/postgresql/data
+
+  inventory_db:
+     container_name: inventory_db
+     image: postgres:17.4
+     environment:
+       POSTGRES_DB: inventorydb
+       POSTGRES_USER: postgres
+       POSTGRES_PASSWORD: admin
+     ports:
+       - "5436:5432"
+     volumes:
+        - inventory_data:/var/lib/postgresql/data
+
+  order_db:
+    container_name: order_db
+    image: postgres:17.4
+    environment:
+      POSTGRES_DB: orderdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5437:5432"
+    volumes:
+      - order_data:/var/lib/postgresql/data
+
+
+  rabbitmq:
+    container_name: rabbitmq_eCommerce
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
 
 volumes:
-  data:
+  account_data:
+  user_data:
+  inventory_data:
+  order_data:

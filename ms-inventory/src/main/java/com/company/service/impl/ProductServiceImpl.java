@@ -42,10 +42,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse updateStock(Long id, int quantity) {
+        log.info("Updating stock, productId {}, quantity {}", id, quantity);
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(DATA_NOT_FOUND_MESSAGE, DATA_NOT_FOUND));
 
-        if (product.getStock() < quantity) {
+        if (quantity < 0 && product.getStock() < (-quantity)) {
 
             throw new InsufficientStockException(
                     String.format(IN_SUFFICIENT_STOCK_MESSAGE,
@@ -55,7 +56,7 @@ public class ProductServiceImpl implements ProductService {
 
         }
 
-        Integer newStock = product.getStock()-quantity;
+        Integer newStock = product.getStock() + quantity;
         product.setStock(newStock);
         productRepository.save(product);
 

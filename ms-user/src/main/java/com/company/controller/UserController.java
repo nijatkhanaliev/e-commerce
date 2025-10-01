@@ -37,9 +37,14 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
-    @GetMapping("email/{email}")
+    @GetMapping("/email/{email}")
     public ResponseEntity<UserResponseWithPassword> getUserByEmail(@PathVariable String email){
         return ResponseEntity.ok(userService.getUserByEmail(email));
+    }
+
+    @GetMapping("/{id}/exists")
+    public ResponseEntity<Boolean> userExists(@PathVariable Long id){
+        return ResponseEntity.ok(userService.userExists(id));
     }
 
 }

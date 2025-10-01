@@ -4,7 +4,7 @@ spring:
   datasource:
     username: postgres
     password: admin
-    url: jdbc:postgresql://localhost:5434/orderdb
+    url: jdbc:postgresql://localhost:5437/orderdb
     driver-class-name: org.postgresql.Driver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:

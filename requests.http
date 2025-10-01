@@ -1,5 +1,5 @@
 
-#register user
+#register user  (ms auth)
 POST http://localhost:8082/api/v1/auth/register
 Content-Type: application/json
 
@@ -8,11 +8,11 @@ Content-Type: application/json
   "lastName": "nicat",
   "email": "nicat@example.com",
   "password": "Nicat123.",
-  "birthDate":"29/12/2004"
+  "birthDate": "29/12/2004"
 }
 
 ###
-#login user
+#login user  (ms auth)
 POST http://localhost:8082/api/v1/auth/login
 Content-Type: application/json
 
@@ -22,16 +22,71 @@ Content-Type: application/json
 }
 
 ###
-# refresh token
+# refresh token  (ms auth)
 POST http://localhost:8082/api/v1/auth/refresh
 Content-Type: application/json
 
 {
-"userEmail": "nicat@example.com",
-"refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuaWNhdEBleGFtcGxlLmNvbSIsImlhdCI6MTc1ODcxMzIyMSwiZXhwIjoxNzU4NzE1MDIxfQ.4eLlEfLf_2QbRjxvyq4n1m25ZLCRfZFqJOaFZsr04h8"
+  "userEmail": "nicat@example.com",
+  "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuaWNhdEBleGFtcGxlLmNvbSIsImlhdCI6MTc1ODcyMzI0MywiZXhwIjoxNzU4NzI1MDQzfQ.tgEjYzx7Y1hrIsaf_feWaYXuih4-rbc0L4Qk_XlHESc"
 }
 
 ###
-#getUserById
+#getUserById  (ms user)
 GET http://localhost:8083/api/v1/users/1
 
+###
+#getAccountByUserId  (ms account)
+GET http://localhost:8084/api/v1/accounts/1
+
+###
+#creditAccount    (ms account)
+POST http://localhost:8084/api/v1/accounts/1/credit
+Content-Type: application/json
+
+{
+  "amount": 100.0
+}
+
+
+###
+#addProduct    (ms inventory)
+POST http://localhost:8085/api/v1/products
+Content-Type: application/json
+
+{
+  "name": "iPhone 16",
+  "description": "Apple iPhone",
+  "price": 1756.99,
+  "stock": 8
+}
+
+###
+#getProductById   (ms inventory)
+GET http://localhost:8085/api/v1/products/1
+
+###
+#updateStock      (ms inventory)
+PUT http://localhost:8085/api/v1/products/1/stock?quantity=-2
+
+
+###
+#createOrder     (ms order)
+POST http://localhost:8086/api/v1/orders
+Content-Type: application/json
+current-user-id: 1
+
+{
+  "orderItemRequests": [
+    {
+      "productId": 1,
+      "quantity": 2,
+      "price": 499.99
+    },
+    {
+      "productId": 2,
+      "quantity": 1,
+      "price": 1299.50
+    }
+  ]
+}

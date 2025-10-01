@@ -57,6 +57,7 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse refresh(RefreshTokenRequest request) {
         log.info("Refreshing token");
         if (!jwtUtil.isRefreshTokenValid(request.getRefreshToken(), request.getUserEmail())) {
+            log.warn("Refresh token is not valid");
             throw new UnauthorizedException(UNAUTHORIZED_MESSAGE, UNAUTHORIZED);
         }
         log.info("Getting user info from userMS");

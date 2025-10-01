@@ -11,4 +11,6 @@ public interface UserService {
     UserResponse getUserById(Long userId);
 
     UserResponseWithPassword getUserByEmail(String email);
+
+    Boolean userExists(Long id);
 }

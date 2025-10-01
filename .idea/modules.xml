@@ -3,7 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/e-commerce.iml" filepath="$PROJECT_DIR$/.idea/e-commerce.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ms-account.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ms-account.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ms-auth.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ms-auth.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ms-inventory.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ms-inventory.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ms-order.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ms-order.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ms-user.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ms-user.main.iml" />
     </modules>
   </component>

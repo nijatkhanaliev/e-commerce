@@ -1,7 +1,10 @@
 package com.company.dao.entity;
 
+import com.company.model.enums.AccountStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,6 +35,9 @@ public class Account {
 
     @Column(nullable = false)
     private BigDecimal balance = BigDecimal.ZERO;
+
+    @Enumerated(EnumType.STRING)
+    private AccountStatus status;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

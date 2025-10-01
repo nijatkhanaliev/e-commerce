@@ -5,7 +5,7 @@ spring:
   datasource:
     username: postgres
     password: admin
-    url: jdbc:postgresql://localhost:5434/userdb
+    url: jdbc:postgresql://localhost:5435/accountdb
     driver-class-name: org.postgresql.Driver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
@@ -21,6 +21,19 @@ spring:
     properties:
       hibernate:
         format_sql: false
+
+  rabbitmq:
+    listener:
+      simple:
+        acknowledge-mode: auto
+        retry:
+          enabled: true
+          initial-interval: 2s
+          multiplier: 2.0
+          max-interval: 10s
+          max-attempts: 5
+        default-requeue-rejected: false
+
 
 server:
   port: 8084

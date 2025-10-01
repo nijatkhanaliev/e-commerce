@@ -83,7 +83,6 @@ public class OrderServiceImpl implements OrderService {
         orderCreatedEvent.setTotalPrice(order.getTotalAmount());
         orderCreatedEvent.setOrderId(orderEntity.getId());
 
-        log.info("ORDER.CREATED.EVENT.ITEMS.FIRST.PRODUCT.ID: {}", orderCreatedEvent.getOrderItemEvents().getFirst().getProductId());
         orderCreatedProducer.send(ORDER_EXCHANGE, ORDER_ROUTING_KEY, orderCreatedEvent);
 
         return orderMapper.toOrderResponse(orderEntity);

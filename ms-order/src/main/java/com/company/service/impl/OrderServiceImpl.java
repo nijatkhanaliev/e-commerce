@@ -3,7 +3,6 @@ package com.company.service.impl;
 import com.company.client.UserClient;
 import com.company.dao.entity.Order;
 import com.company.dao.entity.OrderItem;
-import com.company.dao.repository.OrderItemRepository;
 import com.company.dao.repository.OrderRepository;
 import com.company.exception.EmptyOrderItemsException;
 import com.company.exception.NotFoundException;
@@ -70,7 +69,7 @@ public class OrderServiceImpl implements OrderService {
         order.setUserId(userId);
         order.setTotalAmount(totalOrderAmount);
 
-        orderItems.forEach(item-> item.setOrder(order));
+        orderItems.forEach(item -> item.setOrder(order));
         order.setItems(orderItems);
         Order orderEntity = orderRepository.save(order);
 
@@ -86,6 +85,15 @@ public class OrderServiceImpl implements OrderService {
         orderCreatedProducer.send(ORDER_EXCHANGE, ORDER_ROUTING_KEY, orderCreatedEvent);
 
         return orderMapper.toOrderResponse(orderEntity);
+    }
+
+    @Override
+    public OrderResponse getOrderDetails(Long orderId, Long userId) {
+        log.info("Getting order details, userId {}, orderId {}", userId, orderId);
+        Order order = orderRepository.findByIdAndUserId(orderId, userId)
+                .orElseThrow(() -> new NotFoundException(DATA_NOT_FOUND_MESSAGE, DATA_NOT_FOUND));
+
+        return orderMapper.toOrderResponse(order);
     }
 
 }

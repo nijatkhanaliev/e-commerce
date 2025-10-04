@@ -24,11 +24,11 @@ public class StockUpdatedConsumer {
 
     @RabbitListener(queues = STOCK_UPDATED_QUEUE)
     private void consumerStockUpdated(StockUpdatedEvent event) {
-        if ("FAIL".equals(event.getStatus())) {
-            log.error("Stock updated failed, orderId {}. Message '{}'",
+        if ("FAILED".equals(event.getStatus())) {
+            log.warn("Stock updated failed, orderId {}. Message '{}'",
                     event.getOrderId(), event.getReason());
 
-            log.info("Order cancelled, orderId {}", event.getOrderId());
+            log.info("Order cancelling, orderId {}", event.getOrderId());
             Long orderId = event.getOrderId();
             Order order = orderRepository.findById(orderId)
                     .orElseThrow(() -> new NotFoundException(DATA_NOT_FOUND_MESSAGE, DATA_NOT_FOUND));

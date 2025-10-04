@@ -1,4 +1,4 @@
-package com.company.model.dto;
+package com.company.model.event;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package com.company.model.dto;
+package com.company.model.event;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +13,7 @@ import java.util.UUID;
 public class OrderCreatedEvent implements Serializable {
     private String eventId = UUID.randomUUID().toString();
     private Long orderId;
+    private Long userId;
     private BigDecimal totalPrice;
     private List<OrderItemEvent> orderItemEvents;
 }

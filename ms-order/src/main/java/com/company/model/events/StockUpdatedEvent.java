@@ -1,4 +1,4 @@
-package com.company.model.dto;
+package com.company.model.event;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,7 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StockUpdatedEvent {
-    private String eventId;
     private Long orderId;
     private String status;
     private String reason;

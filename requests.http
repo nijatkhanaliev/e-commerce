@@ -28,7 +28,7 @@ Content-Type: application/json
 
 {
   "userEmail": "nicat@example.com",
-  "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuaWNhdEBleGFtcGxlLmNvbSIsImlhdCI6MTc1ODcyMzI0MywiZXhwIjoxNzU4NzI1MDQzfQ.tgEjYzx7Y1hrIsaf_feWaYXuih4-rbc0L4Qk_XlHESc"
+  "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuaWNhdEBleGFtcGxlLmNvbSIsImlhdCI6MTc1OTU3NTQwNCwiZXhwIjoxNzU5NTc3MjA0fQ.RZWF6vaZ2vrPCnlUNJE0NUn4RVDOscWd_fJr2qUmwEw"
 }
 
 ###
@@ -55,10 +55,10 @@ POST http://localhost:8085/api/v1/products
 Content-Type: application/json
 
 {
-  "name": "iPhone 16",
+  "name": "iPhone 17",
   "description": "Apple iPhone",
-  "price": 1756.99,
-  "stock": 8
+  "price": 2756.99,
+  "stock": 5
 }
 
 ###
@@ -67,7 +67,7 @@ GET http://localhost:8085/api/v1/products/1
 
 ###
 #updateStock      (ms inventory)
-PUT http://localhost:8085/api/v1/products/1/stock?quantity=-2
+PUT http://localhost:8085/api/v1/products/1/stock?quantity=3
 
 
 ###
@@ -84,9 +84,14 @@ current-user-id: 1
       "price": 499.99
     },
     {
-      "productId": 2,
+      "productId": 3,
       "quantity": 1,
       "price": 1299.50
     }
   ]
 }
+
+###
+# getOrderById  (ms order)
+GET http://localhost:8086/api/v1/orders/1
+current-user-id: 1

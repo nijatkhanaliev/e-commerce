@@ -7,8 +7,8 @@ import com.company.dao.repository.OrderRepository;
 import com.company.exception.EmptyOrderItemsException;
 import com.company.exception.NotFoundException;
 import com.company.messaging.OrderCreatedProducer;
-import com.company.model.dto.OrderCreatedEvent;
-import com.company.model.dto.OrderItemEvent;
+import com.company.model.events.OrderCreatedEvent;
+import com.company.model.dto.OrderItemDto;
 import com.company.model.dto.request.OrderItemRequest;
 import com.company.model.dto.request.OrderRequest;
 import com.company.model.dto.response.OrderResponse;
@@ -74,11 +74,11 @@ public class OrderServiceImpl implements OrderService {
         Order orderEntity = orderRepository.save(order);
 
         log.info("OrderCreatedEvent created, orderId {}", orderEntity.getId());
-        List<OrderItemEvent> orderItemEvents = orderItems.stream()
-                .map(item -> new OrderItemEvent(item.getProductId(), item.getQuantity()))
+        List<OrderItemDto> orderItemDtos = orderItems.stream()
+                .map(item -> new OrderItemDto(item.getProductId(), item.getQuantity()))
                 .toList();
         OrderCreatedEvent orderCreatedEvent = new OrderCreatedEvent();
-        orderCreatedEvent.setOrderItemEvents(orderItemEvents);
+        orderCreatedEvent.setOrderItemDtos(orderItemDtos);
         orderCreatedEvent.setTotalPrice(order.getTotalAmount());
         orderCreatedEvent.setOrderId(orderEntity.getId());
 

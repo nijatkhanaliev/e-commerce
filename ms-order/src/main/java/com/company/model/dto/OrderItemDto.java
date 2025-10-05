@@ -1,4 +1,4 @@
-package com.company.model.event;
+package com.company.model.events;
 
 import lombok.Getter;
 import lombok.Setter;

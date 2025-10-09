@@ -4,16 +4,21 @@ import com.company.dao.entity.Product;
 import com.company.dao.repository.ProductRepository;
 import com.company.exception.InsufficientStockException;
 import com.company.exception.NotFoundException;
+import com.company.model.dto.PageResponse;
 import com.company.model.dto.request.ProductRequest;
 import com.company.model.dto.response.ProductResponse;
 import com.company.model.mapper.ProductMapper;
 import com.company.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static com.company.exception.constant.ErrorCode.DATA_NOT_FOUND;
 import static com.company.exception.constant.ErrorCode.IN_SUFFICIENT_STOCK;
@@ -33,6 +38,26 @@ public class ProductServiceImpl implements ProductService {
         log.info("Adding product, productName {}", request.getName());
         Product product = productMapper.toProduct(request);
         productRepository.save(product);
+    }
+
+    @Override
+    public PageResponse<ProductResponse> getAllProduct(int page, int size) {
+        log.info("Getting all product");
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Product> allProduct = productRepository.findAll(pageable);
+        List<ProductResponse> productResponses = productMapper.toProductResponses(allProduct.getContent());
+
+        PageResponse<ProductResponse> pageResponse = new PageResponse<>();
+        pageResponse.setContent(productResponses);
+        pageResponse.setNumber(allProduct.getNumber());
+        pageResponse.setSize(allProduct.getSize());
+        pageResponse.setTotalElements(allProduct.getTotalElements());
+        pageResponse.setTotalPages(allProduct.getTotalPages());
+        pageResponse.setLast(allProduct.isLast());
+        pageResponse.setFirst(allProduct.isFirst());
+
+        return pageResponse;
     }
 
     @Override

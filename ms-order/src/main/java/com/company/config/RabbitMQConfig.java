@@ -16,7 +16,7 @@ public class RabbitMQConfig {
 
     public static final String STOCK_UPDATED_QUEUE = "stock-updated-queue";
     public static final String ORDER_EXCHANGE = "order-exchange";
-    public static final String ORDER_ROUTING_KEY = "order.created";
+    public static final String INVENTORY_ORDER_ROUTING_KEY = "inventory.order.created";
     public static final String STOCK_UPDATED_ROUTING_KEY = "stock.updated";
 
     @Bean

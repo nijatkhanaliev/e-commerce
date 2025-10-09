@@ -45,10 +45,10 @@ build-image:
     - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
     - docker push $IMAGE_NAME:$CI_COMMIT_SHORT_SHA
   only:
-    - master
+    - main
 
 deploy:
   stage: deploy
   script:  echo "Deploying the application..."
   only:
-    - master
+    - main

@@ -3,7 +3,7 @@ package com.company.messaging;
 import com.company.dao.entity.Order;
 import com.company.dao.repository.OrderRepository;
 import com.company.exception.NotFoundException;
-import com.company.model.dto.StockUpdatedEvent;
+import com.company.model.events.StockUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -34,7 +34,7 @@ public class StockUpdatedConsumer {
                     .orElseThrow(() -> new NotFoundException(DATA_NOT_FOUND_MESSAGE, DATA_NOT_FOUND));
             order.setStatus(CANCELLED);
             orderRepository.save(order);
-        } else if ("SUCCESS".equals(event.getStatus())) {
+        } else if ("RESERVED".equals(event.getStatus())) {
             log.info("Stock updated. orderId {}", event.getOrderId());
             Long orderId = event.getOrderId();
             Order order = orderRepository.findById(orderId)

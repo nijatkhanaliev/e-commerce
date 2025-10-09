@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,8 +33,11 @@ public class Product {
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
+
     @Column(nullable = false)
     private Integer stock;
+
+    private boolean active;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
@@ -41,4 +45,10 @@ public class Product {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    void init(){
+        this.active = true;
+    }
+
 }

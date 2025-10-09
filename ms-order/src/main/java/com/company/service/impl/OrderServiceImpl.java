@@ -1,5 +1,6 @@
 package com.company.service.impl;
 
+import com.company.client.InventoryClient;
 import com.company.client.UserClient;
 import com.company.dao.entity.Order;
 import com.company.dao.entity.OrderItem;
@@ -25,7 +26,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static com.company.config.RabbitMQConfig.ORDER_EXCHANGE;
-import static com.company.config.RabbitMQConfig.ORDER_ROUTING_KEY;
+import static com.company.config.RabbitMQConfig.INVENTORY_ORDER_ROUTING_KEY;
 import static com.company.exception.constant.ErrorCode.DATA_NOT_FOUND;
 import static com.company.exception.constant.ErrorCode.EMPTY_ORDER_ITEMS;
 import static com.company.exception.constant.ErrorMessage.DATA_NOT_FOUND_MESSAGE;
@@ -39,6 +40,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final UserClient userClient;
+    private final InventoryClient inventoryClient;
     private final OrderItemMapper orderItemMapper;
     private final OrderCreatedProducer orderCreatedProducer;
 
@@ -56,8 +58,7 @@ public class OrderServiceImpl implements OrderService {
         if (orderItemRequests.isEmpty()) {
             throw new EmptyOrderItemsException(EMPTY_ORDER_ITEMS_MESSAGE, EMPTY_ORDER_ITEMS);
         }
-        log.info("creating order, userId {}", userId);
-        List<OrderItem> orderItems = orderItemMapper.toOrderItems(orderItemRequests);
+        List<OrderItem> orderItems = orderItemMapper.toOrderItems(orderItemRequests, inventoryClient);
 
         BigDecimal totalOrderAmount = orderItems.stream()
                 .map(OrderItem::getTotalPrice)
@@ -77,12 +78,14 @@ public class OrderServiceImpl implements OrderService {
         List<OrderItemDto> orderItemDtos = orderItems.stream()
                 .map(item -> new OrderItemDto(item.getProductId(), item.getQuantity()))
                 .toList();
+
         OrderCreatedEvent orderCreatedEvent = new OrderCreatedEvent();
         orderCreatedEvent.setOrderItemDtos(orderItemDtos);
+        orderCreatedEvent.setUserId(userId);
         orderCreatedEvent.setTotalPrice(order.getTotalAmount());
         orderCreatedEvent.setOrderId(orderEntity.getId());
 
-        orderCreatedProducer.send(ORDER_EXCHANGE, ORDER_ROUTING_KEY, orderCreatedEvent);
+        orderCreatedProducer.send(ORDER_EXCHANGE, INVENTORY_ORDER_ROUTING_KEY, orderCreatedEvent);
 
         return orderMapper.toOrderResponse(orderEntity);
     }

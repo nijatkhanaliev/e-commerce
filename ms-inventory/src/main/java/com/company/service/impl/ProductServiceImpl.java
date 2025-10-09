@@ -11,6 +11,9 @@ import com.company.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
 
 import static com.company.exception.constant.ErrorCode.DATA_NOT_FOUND;
 import static com.company.exception.constant.ErrorCode.IN_SUFFICIENT_STOCK;
@@ -41,26 +44,36 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponse updateStock(Long id, int quantity) {
-        log.info("Updating stock, productId {}, quantity {}", id, quantity);
+    @Transactional
+    public ProductResponse updateStock(Long id, int newStock) {
+        log.info("Updating stock, productId {}, quantity {}", id, newStock);
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(DATA_NOT_FOUND_MESSAGE, DATA_NOT_FOUND));
 
-        if (quantity < 0 && product.getStock() < (-quantity)) {
-
+        if (newStock < 0) {
             throw new InsufficientStockException(
                     String.format(IN_SUFFICIENT_STOCK_MESSAGE,
-                            quantity, product.getStock(), product.getId()),
+                            newStock, product.getStock(), product.getId()),
                     IN_SUFFICIENT_STOCK
             );
-
         }
 
-        Integer newStock = product.getStock() + quantity;
+        if (newStock == 0) {
+            product.setActive(false);
+        }
+
         product.setStock(newStock);
         productRepository.save(product);
 
         return productMapper.toProductResponse(product);
     }
+
+    @Override
+    public BigDecimal getProductPriceById(Long id) {
+        log.info("Getting product price, productId {}", id);
+        return productRepository.findPriceById(id)
+                .orElseThrow(() -> new NotFoundException(DATA_NOT_FOUND_MESSAGE, DATA_NOT_FOUND));
+    }
+
 
 }

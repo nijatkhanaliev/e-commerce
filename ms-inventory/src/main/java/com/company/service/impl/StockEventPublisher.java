@@ -5,13 +5,14 @@ import com.company.dao.repository.ProductRepository;
 import com.company.exception.InvalidOrderItemsException;
 import com.company.exception.NotFoundException;
 import com.company.messaging.StockUpdatedProducer;
-import com.company.model.dto.OrderCreatedEvent;
-import com.company.model.dto.OrderItemEvent;
-import com.company.model.dto.StockUpdatedEvent;
+import com.company.model.dto.OrderItemDto;
+import com.company.model.events.OrderCreatedEvent;
+import com.company.model.events.StockUpdatedEvent;
 import com.company.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -40,9 +41,10 @@ public class StockEventPublisher {
         stockUpdatedProducer.send(ORDER_EXCHANGE, STOCK_UPDATED_ROUTING_KEY, stockUpdatedEvent);
     }
 
+    @Transactional
     public void handleStockUpdated(OrderCreatedEvent event){
         log.info("Processing order created event, eventId: {}", event.getEventId());
-        List<OrderItemEvent> orderItemEventList = event.getOrderItemEvents();
+        List<OrderItemDto> orderItemEventList = event.getOrderItemDtos();
 
         if (orderItemEventList.isEmpty()) {
             log.error("Order.Item.Event is empty, orderId {}", event.getOrderId());

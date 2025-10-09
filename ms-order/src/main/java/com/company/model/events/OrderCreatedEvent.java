@@ -1,5 +1,6 @@
-package com.company.model.event;
+package com.company.model.events;
 
+import com.company.model.dto.OrderItemDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,5 +16,5 @@ public class OrderCreatedEvent implements Serializable {
     private Long orderId;
     private Long userId;
     private BigDecimal totalPrice;
-    private List<OrderItemEvent> orderItemEvents;
+    private List<OrderItemDto> orderItemDtos;
 }

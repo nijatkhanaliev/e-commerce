@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
@@ -39,6 +41,11 @@ public class ProductController {
     @PutMapping("/{id}/stock")
     public ResponseEntity<ProductResponse> updateStock(@PathVariable Long id, @RequestParam int quantity){
         return ResponseEntity.ok(productService.updateStock(id, quantity));
+    }
+
+    @GetMapping("/{id}/price")
+    public ResponseEntity<BigDecimal> getProductPriceById(@PathVariable Long id){
+        return ResponseEntity.ok(productService.getProductPriceById(id));
     }
 
 }

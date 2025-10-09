@@ -55,15 +55,15 @@ POST http://localhost:8085/api/v1/products
 Content-Type: application/json
 
 {
-  "name": "iPhone 17",
+  "name": "iPhone 16",
   "description": "Apple iPhone",
-  "price": 2756.99,
-  "stock": 5
+  "price": 1756.99,
+  "stock": 8
 }
 
 ###
 #getProductById   (ms inventory)
-GET http://localhost:8085/api/v1/products/1
+GET http://localhost:8085/api/v1/products/2
 
 ###
 #updateStock      (ms inventory)
@@ -80,13 +80,11 @@ current-user-id: 1
   "orderItemRequests": [
     {
       "productId": 1,
-      "quantity": 2,
-      "price": 499.99
+      "quantity": 4
     },
     {
-      "productId": 3,
-      "quantity": 1,
-      "price": 1299.50
+      "productId": 2,
+      "quantity": 1
     }
   ]
 }

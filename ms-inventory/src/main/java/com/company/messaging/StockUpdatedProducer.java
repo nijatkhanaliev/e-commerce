@@ -1,6 +1,6 @@
 package com.company.messaging;
 
-import com.company.model.dto.StockUpdatedEvent;
+import com.company.model.events.StockUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

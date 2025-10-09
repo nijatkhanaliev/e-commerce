@@ -54,6 +54,18 @@ services:
     volumes:
       - order_data:/var/lib/postgresql/data
 
+  payment_db:
+    container_name: payment_db
+    image: postgres:17.4
+    environment:
+      POSTGRES_DB: paymentdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5438:5432"
+    volumes:
+      - payment_data:/var/lib/postgresql/data
+
 
   rabbitmq:
     container_name: rabbitmq_eCommerce
@@ -67,3 +79,4 @@ volumes:
   user_data:
   inventory_data:
   order_data:
+  payment_data:

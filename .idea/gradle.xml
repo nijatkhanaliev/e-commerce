@@ -36,6 +36,14 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/ms-payment" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/ms-payment" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/ms-user" />
         <option name="modules">
           <set>

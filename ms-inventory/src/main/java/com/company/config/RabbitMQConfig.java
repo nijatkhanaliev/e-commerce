@@ -14,9 +14,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String ORDER_CREATED_QUEUE = "order-created-queue";
+    public static final String ORDER_CREATED_QUEUE = "inventory-order-created-queue";
     public static final String ORDER_EXCHANGE = "order-exchange";
-    public static final String ORDER_ROUTING_KEY = "order.created";
+    public static final String ORDER_ROUTING_KEY = "inventory.order.created";
     public static final String STOCK_UPDATED_ROUTING_KEY = "stock.updated";
 
     @Bean
@@ -34,7 +34,7 @@ public class RabbitMQConfig {
 
     @Bean
     public TopicExchange deadLetterExchange() {
-        return new TopicExchange(ORDER_CREATED_QUEUE + ".dlx");
+        return new TopicExchange(ORDER_EXCHANGE + ".dlx");
     }
 
     @Bean

@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class StockUpdatedEvent {
+public class StockFailedEvent {
     private Long orderId;
     private String status;
     private String reason;

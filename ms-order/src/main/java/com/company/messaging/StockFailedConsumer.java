@@ -18,7 +18,7 @@ import static com.company.model.enums.OrderStatus.CONFIRMED;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class StockUpdatedConsumer {
+public class StockFailedConsumer {
 
     private final OrderRepository orderRepository;
 

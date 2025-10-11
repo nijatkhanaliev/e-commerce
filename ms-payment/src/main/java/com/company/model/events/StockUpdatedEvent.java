@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class OrderCreatedEvent {
+public class StockUpdateEvent {
     private String eventId;
     private Long orderId;
     private Long userId;

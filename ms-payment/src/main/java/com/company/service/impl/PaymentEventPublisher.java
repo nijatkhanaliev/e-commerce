@@ -1,6 +1,7 @@
 package com.company.service.impl;
 
 import com.company.client.AccountClient;
+import com.company.dao.entity.Payment;
 import com.company.dao.repository.PaymentRepository;
 import com.company.exception.AccountBlockedException;
 import com.company.exception.InsufficientBalanceException;
@@ -8,7 +9,7 @@ import com.company.messaging.PaymentFailedProducer;
 import com.company.messaging.PaymentSuccessProducer;
 import com.company.model.dto.AccountResponseDTO;
 import com.company.model.dto.request.DecreaseAccountRequest;
-import com.company.model.events.OrderCreatedEvent;
+import com.company.model.events.StockUpdatedEvent;
 import com.company.model.events.PaymentFailedEvent;
 import com.company.model.events.PaymentSuccessEvent;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import static com.company.exception.constant.ErrorCode.ACCOUNT_BLOCKED;
 import static com.company.exception.constant.ErrorCode.INSUFFICIENT_BALANCE;
 import static com.company.exception.constant.ErrorMessage.ACCOUNT_BLOCKED_MESSAGE;
 import static com.company.exception.constant.ErrorMessage.INSUFFICIENT_BALANCE_MESSAGE;
+import static com.company.model.enums.PaymentStatus.SUCCESS;
 
 @Slf4j
 @Service
@@ -38,7 +40,7 @@ public class PaymentEventPublisher {
 
 
     @Transactional
-    public void handleOrderCreatedPayment(OrderCreatedEvent event) {
+    public void handlePayment(StockUpdatedEvent event) {
         Long userId = event.getUserId();
         BigDecimal totalPrice = event.getTotalPrice();
         log.info("Handle Order Created Payment. Getting user account. userId {}", userId);
@@ -52,11 +54,18 @@ public class PaymentEventPublisher {
             throw new InsufficientBalanceException(INSUFFICIENT_BALANCE_MESSAGE, INSUFFICIENT_BALANCE);
         }
         DecreaseAccountRequest decreaseAccountRequest = DecreaseAccountRequest.builder()
-                .totalPrice(totalPrice)
+                .amount(totalPrice)
                 .build();
 
         log.info("Decreasing user balance, userId {}", userId);
         accountClient.decreaseAccount(userId, decreaseAccountRequest);
+
+        Payment payment = new Payment();
+        payment.setOrderId(event.getOrderId());
+        payment.setStatus(SUCCESS);
+        payment.setUserId(event.getUserId());
+        payment.setAmount(totalPrice);
+        paymentRepository.save(payment);
 
         PaymentSuccessEvent successfulPaymentEvent = PaymentSuccessEvent
                 .builder()
@@ -68,7 +77,7 @@ public class PaymentEventPublisher {
     }
 
 
-    public void handleOrderCreatedPaymentFailed(Long orderId, String message) {
+    public void handlePaymentFailed(Long orderId, String message) {
         log.info("handleOrderCreatedPaymentFailed method called. orderId {}", orderId);
         PaymentFailedEvent failedPaymentEvent = PaymentFailedEvent.builder()
                 .orderId(orderId)

@@ -20,6 +20,14 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/ms-delivery" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/ms-delivery" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/ms-inventory" />
         <option name="modules">
           <set>

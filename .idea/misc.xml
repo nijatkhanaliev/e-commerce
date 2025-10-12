@@ -5,6 +5,7 @@
     <file type="web" url="file://$PROJECT_DIR$/account-ms" />
     <file type="web" url="file://$PROJECT_DIR$/ms-account" />
     <file type="web" url="file://$PROJECT_DIR$/ms-auth" />
+    <file type="web" url="file://$PROJECT_DIR$/ms-delivery" />
     <file type="web" url="file://$PROJECT_DIR$/ms-inventory" />
     <file type="web" url="file://$PROJECT_DIR$/ms-order" />
     <file type="web" url="file://$PROJECT_DIR$/ms-payment" />

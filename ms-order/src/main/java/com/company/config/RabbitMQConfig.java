@@ -17,11 +17,14 @@ public class RabbitMQConfig {
     public static final String STOCK_FAILED_QUEUE = "stock-failed-queue";
     public static final String ORDER_PAYMENT_FAILED_QUEUE = "order-payment-failed-queue";
     public static final String PAYMENT_SUCCESS_QUEUE = "payment-success-queue";
+    public static final String DELIVERY_COMPLETED_QUEUE = "delivery-completed-queue";
     public static final String ORDER_EXCHANGE = "order-exchange";
     public static final String ORDER_ROUTING_KEY = "order.created";
     public static final String STOCK_FAILED_ROUTING_KEY = "stock.failed";
     public static final String PAYMENT_SUCCESS_ROUTING_KEY = "payment.success";
     public static final String ORDER_PAYMENT_FAILED_ROUTING_KEY = "order.payment.failed";
+    public static final String ORDER_CONFIRMED_ROUTING_KEY = "order.confirmed";
+    public static final String DELIVERY_COMPLETED_ROUTING_KEY = "order.delivered";
 
     @Bean
     public Queue stockFailedQueue() {
@@ -61,6 +64,19 @@ public class RabbitMQConfig {
     @Bean
     public Queue paymentSuccessDLQ() {
         return QueueBuilder.durable(PAYMENT_SUCCESS_QUEUE + ".dlq").build();
+    }
+
+    @Bean
+    public Queue deliverCompletedQueue() {
+        return QueueBuilder.durable(DELIVERY_COMPLETED_QUEUE)
+                .withArgument("x-dead-letter-exchange", ORDER_EXCHANGE + ".dlx")
+                .withArgument("x-dead-letter-routing-key", DELIVERY_COMPLETED_ROUTING_KEY + ".dlq")
+                .build();
+    }
+
+    @Bean
+    public Queue deliveryCompletedDLQ() {
+        return QueueBuilder.durable(DELIVERY_COMPLETED_QUEUE + ".dlq").build();
     }
 
     @Bean
@@ -116,6 +132,20 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public Binding bindingDeliveryCompletedQueue(Queue deliverCompletedQueue, TopicExchange orderExchange) {
+        return BindingBuilder.bind(deliverCompletedQueue)
+                .to(orderExchange)
+                .with(DELIVERY_COMPLETED_ROUTING_KEY);
+    }
+
+    @Bean
+    public Binding bindingDeliveryCompletedDLQ(Queue deliveryCompletedDLQ, TopicExchange deadLetterExchange) {
+        return BindingBuilder.bind(deliveryCompletedDLQ)
+                .to(deadLetterExchange)
+                .with(DELIVERY_COMPLETED_ROUTING_KEY + ".dlq");
+    }
+
+    @Bean
     public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
     }
@@ -127,5 +157,4 @@ public class RabbitMQConfig {
 
         return rabbitTemplate;
     }
-
 }

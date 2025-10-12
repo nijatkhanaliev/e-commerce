@@ -23,7 +23,7 @@ public class RabbitMQConfig {
     public Queue accountQueue() {
         return QueueBuilder.durable(ACCOUNT_QUEUE)
                 .withArgument("x-dead-letter-exchange", ACCOUNT_EXCHANGE + ".dlx")
-                .withArgument("x-dead-letter-routing-key", ACCOUNT_QUEUE + ".dlq")
+                .withArgument("x-dead-letter-routing-key", ACCOUNT_ROUTING_KEY + ".dlq")
                 .build();
     }
 
@@ -53,7 +53,7 @@ public class RabbitMQConfig {
     public Binding bindingEmailDLQ(Queue accountDLQ, TopicExchange deadLetterExchange) {
         return BindingBuilder.bind(accountDLQ)
                 .to(deadLetterExchange)
-                .with(ACCOUNT_QUEUE + ".dlq");
+                .with(ACCOUNT_ROUTING_KEY + ".dlq");
     }
 
 

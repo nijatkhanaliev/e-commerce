@@ -5,6 +5,7 @@ import com.company.dao.repository.OrderRepository;
 import com.company.exception.NotFoundException;
 import com.company.exception.OrderAlreadyCancelledException;
 import com.company.model.events.PaymentSuccessEvent;
+import com.company.service.impl.OrderEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -24,6 +25,7 @@ import static com.company.model.enums.OrderStatus.CONFIRMED;
 public class PaymentSuccessConsumer {
 
     private final OrderRepository orderRepository;
+    private final OrderEventPublisher orderEventPublisher;
 
     @RabbitListener(queues = PAYMENT_SUCCESS_QUEUE)
     private void consumePaymentSuccess(PaymentSuccessEvent event) {
@@ -41,6 +43,7 @@ public class PaymentSuccessConsumer {
 
         order.setStatus(CONFIRMED);
         orderRepository.save(order);
-    }
 
+        orderEventPublisher.publishOrderConfirmedEvent(order.getId(), order.getUserId());
+    }
 }

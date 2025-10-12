@@ -9,4 +9,6 @@ public interface OrderService {
 
     OrderResponse getOrderDetails(Long orderId, Long userId);
 
+    void cancelOrder(Long orderId, Long userId);
+
 }

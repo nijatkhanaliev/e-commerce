@@ -10,5 +10,5 @@ import java.math.BigDecimal;
 @Setter
 @Builder
 public class DecreaseAccountRequest {
-    private BigDecimal totalPrice;
+    private BigDecimal balance;
 }

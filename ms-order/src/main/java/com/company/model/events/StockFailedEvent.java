@@ -7,6 +7,5 @@ import lombok.Setter;
 @Setter
 public class StockFailedEvent {
     private Long orderId;
-    private String status;
     private String reason;
 }

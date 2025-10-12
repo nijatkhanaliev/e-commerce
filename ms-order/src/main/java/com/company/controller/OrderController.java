@@ -40,4 +40,12 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getOrderDetails(id, userId));
     }
 
+    @PostMapping("/{id}/cancel")
+    public ResponseEntity<Void> cancelOrder(@RequestHeader("current-user-id") Long userId,
+                                            @PathVariable Long id) {
+
+        orderService.cancelOrder(id, userId);
+        return ResponseEntity.noContent().build();
+    }
+
 }

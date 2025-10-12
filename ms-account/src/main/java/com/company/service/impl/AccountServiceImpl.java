@@ -4,6 +4,7 @@ import com.company.dao.entity.Account;
 import com.company.dao.repository.AccountRepository;
 import com.company.exception.AlreadyExistsException;
 import com.company.exception.NotFoundException;
+import com.company.model.dto.request.BalanceUpdationRequest;
 import com.company.model.dto.request.CreditRequest;
 import com.company.model.dto.response.AccountResponse;
 import com.company.model.mapper.AccountMapper;
@@ -58,6 +59,16 @@ public class AccountServiceImpl implements AccountService {
         Account account = new Account();
         account.setUserId(userId);
         account.setBalance(BigDecimal.ZERO);
+        accountRepository.save(account);
+    }
+
+    @Override
+    public void updateUserBalance(Long userId, BalanceUpdationRequest request) {
+        log.info("Updating user balance, userId {}, newBalance {}", userId, request.getBalance());
+        Account account = accountRepository.findByUserId(userId)
+                .orElseThrow(() -> new NotFoundException(DATA_NOT_FOUND_MESSAGE, DATA_NOT_FOUND));
+
+        account.setBalance(request.getBalance());
         accountRepository.save(account);
     }
 

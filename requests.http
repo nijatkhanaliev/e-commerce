@@ -45,7 +45,7 @@ POST http://localhost:8084/api/v1/accounts/1/credit
 Content-Type: application/json
 
 {
-  "amount": 100.0
+  "amount": 10000.0
 }
 
 
@@ -55,15 +55,15 @@ POST http://localhost:8085/api/v1/products
 Content-Type: application/json
 
 {
-  "name": "iPhone 16",
+  "name": "iPhone 17",
   "description": "Apple iPhone",
-  "price": 1756.99,
+  "price": 2756.99,
   "stock": 8
 }
 
 ###
 #getProductById   (ms inventory)
-GET http://localhost:8085/api/v1/products/2
+GET http://localhost:8085/api/v1/products/1
 
 ###
 #updateStock      (ms inventory)
@@ -91,5 +91,11 @@ current-user-id: 1
 
 ###
 # getOrderById  (ms order)
-GET http://localhost:8086/api/v1/orders/1
+GET http://localhost:8086/api/v1/orders/2
+current-user-id: 1
+
+
+###
+# getPaymentDetails  (ms payment)
+GET http://localhost:8087/api/v1/payments/1
 current-user-id: 1

@@ -7,13 +7,14 @@ import com.company.dao.entity.OrderItem;
 import com.company.dao.repository.OrderRepository;
 import com.company.exception.EmptyOrderItemsException;
 import com.company.exception.NotFoundException;
+import com.company.exception.OrderAlreadyCancelledException;
 import com.company.messaging.OrderCreatedProducer;
-import com.company.model.events.OrderCreatedEvent;
 import com.company.model.dto.OrderItemDto;
 import com.company.model.dto.request.OrderItemRequest;
 import com.company.model.dto.request.OrderRequest;
 import com.company.model.dto.response.OrderResponse;
 import com.company.model.enums.OrderStatus;
+import com.company.model.events.OrderCreatedEvent;
 import com.company.model.mapper.OrderItemMapper;
 import com.company.model.mapper.OrderMapper;
 import com.company.service.OrderService;
@@ -26,11 +27,18 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static com.company.config.RabbitMQConfig.ORDER_EXCHANGE;
-import static com.company.config.RabbitMQConfig.INVENTORY_ORDER_ROUTING_KEY;
+import static com.company.config.RabbitMQConfig.ORDER_ROUTING_KEY;
 import static com.company.exception.constant.ErrorCode.DATA_NOT_FOUND;
 import static com.company.exception.constant.ErrorCode.EMPTY_ORDER_ITEMS;
+import static com.company.exception.constant.ErrorCode.ORDER_CANCELLATION_NOT_ALLOWED;
 import static com.company.exception.constant.ErrorMessage.DATA_NOT_FOUND_MESSAGE;
 import static com.company.exception.constant.ErrorMessage.EMPTY_ORDER_ITEMS_MESSAGE;
+import static com.company.exception.constant.ErrorMessage.ORDER_CANCELLATION_NOT_ALLOWED_MESSAGE;
+import static com.company.model.enums.OrderStatus.CANCELLED;
+import static com.company.model.enums.OrderStatus.DELIVERED;
+import static com.company.model.enums.OrderStatus.PAYMENT_FAILED;
+import static com.company.model.enums.OrderStatus.SHIPPED;
+import static com.company.model.enums.OrderStatus.STOCK_FAILED;
 
 @Slf4j
 @Service
@@ -85,7 +93,7 @@ public class OrderServiceImpl implements OrderService {
         orderCreatedEvent.setTotalPrice(order.getTotalAmount());
         orderCreatedEvent.setOrderId(orderEntity.getId());
 
-        orderCreatedProducer.send(ORDER_EXCHANGE, INVENTORY_ORDER_ROUTING_KEY, orderCreatedEvent);
+        orderCreatedProducer.send(ORDER_EXCHANGE, ORDER_ROUTING_KEY, orderCreatedEvent);
 
         return orderMapper.toOrderResponse(orderEntity);
     }
@@ -97,6 +105,26 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new NotFoundException(DATA_NOT_FOUND_MESSAGE, DATA_NOT_FOUND));
 
         return orderMapper.toOrderResponse(order);
+    }
+
+    @Override
+    public void cancelOrder(Long orderId, Long userId) {
+        log.info("Cancelling order, userId {}, orderId {}", userId, orderId);
+        Order order = orderRepository.findByIdAndUserId(orderId, userId)
+                .orElseThrow(() -> new NotFoundException(DATA_NOT_FOUND_MESSAGE, DATA_NOT_FOUND));
+
+        if (order.getStatus() == CANCELLED || order.getStatus() == DELIVERED ||
+                order.getStatus() == SHIPPED || order.getStatus() == STOCK_FAILED
+                || order.getStatus() == PAYMENT_FAILED
+        ) {
+            throw new OrderAlreadyCancelledException(
+                    String.format(ORDER_CANCELLATION_NOT_ALLOWED_MESSAGE, order.getStatus()),
+                    ORDER_CANCELLATION_NOT_ALLOWED
+            );
+        }
+
+        order.setStatus(CANCELLED);
+        orderRepository.save(order);
     }
 
 }

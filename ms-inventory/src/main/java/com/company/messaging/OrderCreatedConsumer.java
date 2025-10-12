@@ -19,8 +19,6 @@ public class OrderCreatedConsumer {
 
     private final StockEventPublisher stockEventPublisher;
 
-    private int count = 0;
-
     @RabbitListener(queues = ORDER_CREATED_QUEUE)
     private void handleOrderCreated(OrderCreatedEvent event) {
         try {
@@ -28,13 +26,8 @@ public class OrderCreatedConsumer {
         } catch (InvalidOrderItemsException | NotFoundException | InsufficientStockException ex) {
             stockEventPublisher.handleStockUpdatedFailed(event.getOrderId(), ex.getMessage());
         } catch (Exception ex) {
-            count++;
-            if (count == 5) {
-                log.error("ORDER.CREATED.EVENT in inventory, exception happened, retryCount {}. Message '{}'", count, ex.getMessage());
-                stockEventPublisher.handleStockUpdatedFailed(event.getOrderId(), ex.getMessage());
-                count = 0;
-            }
-            throw ex;
+            log.error("ORDER.CREATED.EVENT in inventory, exception happened. Message '{}'", ex.getMessage());
+            stockEventPublisher.handleStockUpdatedFailed(event.getOrderId(), ex.getMessage());
         }
     }
 
